@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -28,5 +27,13 @@ func (r *Router) FindHandler(path string) (http.HandlerFunc, bool) {
 //Para ser parte de Handler http debemos implementar el metodo ServeHTTP
 //Esta funcion recibe un writer y un request.
 func (r *Router) ServeHTTP(w http.ResponseWriter, request *http.Request) {
-	fmt.Fprintf(w, "Hello test!")
+	handler, exist := r.FindHandler(request.URL.Path)
+
+	if !exist {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	handler(w, request)
+
 }

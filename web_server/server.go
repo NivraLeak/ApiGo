@@ -18,6 +18,11 @@ func NewServer(port string) *Server {
 	}
 }
 
+// Agregamos la funcion que permitira a nuestro servidor agregar rutas a un handler especifico
+func (s *Server) Handle(path string, handler http.HandlerFunc) {
+	s.router.rules[path] = handler
+}
+
 // Esta funcion sera propia del servidor
 // Devolvera un error en caso se encuentre un error
 func (s *Server) Listen() error {
