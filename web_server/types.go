@@ -10,18 +10,14 @@ type Middleware func(http.HandlerFunc) http.HandlerFunc
 type MetaData interface{}
 
 type User struct {
-	Name     string   `json:"name"`
-	Email    string   `json:"email"`
-	Synt     []string `json:"synt"`
-	Infected string   `json:"infected"`
+	Name     string     `json:"name"`
+	Email    string     `json:"email"`
+	Synt     []string   `json:"synt"`
+	Infected [][]string `json:"infected"`
 }
 
 func (u *User) ToJson() ([]byte, error) {
 	return json.Marshal(u)
-}
-
-func (u *User) toPercentageTree() {
-	u.Infected = "oh No"
 }
 
 type DataSymptom struct {
@@ -32,16 +28,17 @@ func (dSymptom *DataSymptom) buildTreeDecision() DecisionNode {
 	return buildTreeFor(dSymptom.data)
 }
 
-func (dSymptom *DataSymptom) addRow(row []string) string {
+func (dSymptom *DataSymptom) addRow(row []string) [][]string {
 	if len(row) != len(dSymptom.data[0]) {
-		return "Insuficientes datos"
+		err := [][]string{{"Insuficientes datos"}}
+		return err
 	}
 	dSymptom.data = append(dSymptom.data, row)
 	longRows := len(dSymptom.data)
-	longColumns := len(dSymptom.data[0])
-	dSymptom.buildTreeDecision()
+	myTree := dSymptom.buildTreeDecision()
+	percentageUser := printLeaf(classify(dSymptom.data[longRows-1], myTree))
 
-	return dSymptom.data[longRows-1][longColumns-1]
+	return percentageUser
 }
 
 func (dSymptom *DataSymptom) buildData() {
