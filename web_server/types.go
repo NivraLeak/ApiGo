@@ -33,15 +33,15 @@ func (dSymptom *DataSymptom) buildTreeDecision() DecisionNode {
 }
 
 func (dSymptom *DataSymptom) addRow(row []string) string {
+	if len(row) != len(dSymptom.data[0]) {
+		return "Insuficientes datos"
+	}
 	dSymptom.data = append(dSymptom.data, row)
 	longRows := len(dSymptom.data)
 	longColumns := len(dSymptom.data[0])
-	if longRows > 0 {
-		dSymptom.buildTreeDecision()
-	}
+	dSymptom.buildTreeDecision()
 
 	return dSymptom.data[longRows-1][longColumns-1]
-
 }
 
 func (dSymptom *DataSymptom) buildData() {
