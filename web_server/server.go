@@ -18,6 +18,23 @@ func NewServer(port string) *Server {
 	}
 }
 
+// Agregamos la funcion que permitira a nuestro servidor agregar rutas a un handler especifico
+func (s *Server) Handle(method string, path string, handler http.HandlerFunc) {
+	_, exist := s.router.rules[path]
+	if !exist {
+		s.router.rules[path] = make(map[string]http.HandlerFunc)
+	}
+
+	s.router.rules[path][method] = handler
+}
+
+func (s *Server) AddMiddleware(f http.HandlerFunc, middlewares ...Middleware) http.HandlerFunc {
+	for _, m := range middlewares {
+		f = m(f)
+	}
+	return f
+}
+
 // Esta funcion sera propia del servidor
 // Devolvera un error en caso se encuentre un error
 func (s *Server) Listen() error {
