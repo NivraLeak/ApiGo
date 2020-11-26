@@ -39,7 +39,9 @@ func UserPostRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.Percen = dSymptom.addRow(user.Synt)
+	dSymptom.buildData()
+
+	user.Infected = dSymptom.addRow(user.Synt)
 
 	response, err := user.ToJson()
 	if err != nil {

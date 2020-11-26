@@ -10,10 +10,10 @@ type Middleware func(http.HandlerFunc) http.HandlerFunc
 type MetaData interface{}
 
 type User struct {
-	Name   string   `json:"name"`
-	Email  string   `json:"email"`
-	Synt   []string `json:"synt"`
-	Percen string   `json:"percen"`
+	Name     string   `json:"name"`
+	Email    string   `json:"email"`
+	Synt     []string `json:"synt"`
+	Infected string   `json:"infected"`
 }
 
 func (u *User) ToJson() ([]byte, error) {
@@ -21,7 +21,7 @@ func (u *User) ToJson() ([]byte, error) {
 }
 
 func (u *User) toPercentageTree() {
-	u.Percen = "oh No"
+	u.Infected = "oh No"
 }
 
 type DataSymptom struct {
@@ -42,4 +42,10 @@ func (dSymptom *DataSymptom) addRow(row []string) string {
 
 	return dSymptom.data[longRows-1][longColumns-1]
 
+}
+
+func (dSymptom *DataSymptom) buildData() {
+	var data = readDataFunc("assets/data/datatest02Covid.csv", 21)
+
+	dSymptom.data = data
 }
