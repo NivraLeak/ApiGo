@@ -26,7 +26,10 @@ func PostRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Payload %v \n", metadata)
 }
 
+var dSymptom DataSymptom
+
 func UserPostRequest(w http.ResponseWriter, r *http.Request) {
+
 	decoder := json.NewDecoder(r.Body)
 	var user User
 	err := decoder.Decode(&user)
@@ -35,11 +38,16 @@ func UserPostRequest(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "error: %v", err)
 		return
 	}
+
+	user.Percen = dSymptom.addRow(user.Synt)
+
 	response, err := user.ToJson()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(response)
+
 }

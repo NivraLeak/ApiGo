@@ -314,7 +314,7 @@ func printLeaf(counts [][]string) [][]string {
 	return leafConvertArrBiString(props)
 }
 
-func main() {
+func startTree() {
 	// La data se lee con la funcion readDataFunc con los parametos del nombre del archivo y la cantidad de columnas
 	// Si se desea cambiar de archivo se debera poner la misma cantidad de columnas
 	var data = readDataFunc("datatest02Covid.csv", 21)
